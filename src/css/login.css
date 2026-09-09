@@ -6,6 +6,10 @@
     align-items:center;
 }
 
+.titulo-login{
+    margin-top: 45px;
+}
+
 .login-container h1{
     text-align:center;
     color:#d63384;
