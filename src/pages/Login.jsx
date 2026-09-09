@@ -58,7 +58,7 @@ const Login = () => {
   }
   return (
     <div className="login-container">
-      <h1>Iniciar Sesión</h1>
+      <h1 className='titulo-login'>Iniciar Sesión</h1>
       <form onSubmit={manejarSubmit}>
         <label>Email:</label>
         <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
