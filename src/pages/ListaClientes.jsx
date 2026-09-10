@@ -102,13 +102,20 @@ const ListaClientes = () => {
 
               <td>{cliente.address.city}</td>
 
-              <td>
+              <td className="acciones-cliente">
                 <Link
                   className="btn-ficha"
                   to={`/clientes/${cliente.id}`}
                 >
                   Ver Ficha Completa
                 </Link>
+                <button
+                  type="button"
+                  className="btn-eliminar"
+                  onClick={() => {}}
+                >
+                  Eliminar
+                </button>
               </td>
 
             </tr>

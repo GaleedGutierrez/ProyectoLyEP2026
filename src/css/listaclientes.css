@@ -200,6 +200,36 @@
     outline-offset: 3px;
 }
 
+.clientes-container .acciones-cliente {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.clientes-container .btn-eliminar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.875rem;
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: center;
+    background: #dc2626;
+    border: 1px solid #dc2626;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.clientes-container .btn-eliminar:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
+}
+
 @media (max-width: 768px) {
     .clientes-container {
         width: min(100% - 1rem, 1200px);
