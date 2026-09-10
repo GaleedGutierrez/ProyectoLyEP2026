@@ -100,6 +100,31 @@
     outline-offset: 3px;
 }
 
+.contenedor-error-cliente {
+    text-align: center;
+}
+
+.titulo-error-cliente {
+    color: #b42318;
+    margin-bottom: 1rem;
+}
+
+.btn-volver-listado {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.625rem 1.25rem;
+    color: #ffffff;
+    background: var(--detalle-primary);
+    border-radius: 0.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-volver-listado:hover {
+    background: var(--detalle-primary-dark);
+}
+
 @media (max-width: 768px) {
     .detalle-cliente {
         width: min(100% - 1rem, 53.125rem);

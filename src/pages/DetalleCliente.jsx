@@ -1,6 +1,6 @@
 import '../css/detallecliente.css'
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
  
 const DetalleCliente = () => {
  const { id } = useParams();
@@ -68,6 +68,9 @@ const DetalleCliente = () => {
       <div className="detalle-cliente contenedor-error-cliente">
         <h2 className="titulo-error-cliente">Cliente no encontrado</h2>
         <p>No se pudo obtener la información del cliente solicitado.</p>
+        <Link to="/clientes" className="btn-volver-listado">
+          Volver al listado de clientes
+        </Link>
       </div>
     );
   }
