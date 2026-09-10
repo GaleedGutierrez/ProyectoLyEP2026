@@ -2,12 +2,15 @@ import "../css/listaclientes.css"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import FormCliente from "../components/FormCliente";
+import ModalConfirmacion from "../components/ModalConfirmacion";
 
 const ListaClientes = () => {
   const [clientes, setClientes] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+  const [modalAbierto, setModalAbierto] = useState(false);
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/users")
@@ -26,6 +29,16 @@ const ListaClientes = () => {
         setLoading(false);
       });
   }, []);
+
+  const abrirModalEliminar = (cliente) => {
+    setClienteSeleccionado(cliente);
+    setModalAbierto(true);
+  };
+
+  const cerrarModalEliminar = () => {
+    setClienteSeleccionado(null);
+    setModalAbierto(false);
+  };
 
   const clientesFiltrados = clientes.filter(
     (cliente) =>
@@ -112,7 +125,7 @@ const ListaClientes = () => {
                 <button
                   type="button"
                   className="btn-eliminar"
-                  onClick={() => {}}
+                  onClick={() => abrirModalEliminar(cliente)}
                 >
                   Eliminar
                 </button>
@@ -124,6 +137,18 @@ const ListaClientes = () => {
         </tbody>
 
       </table>
+
+      <ModalConfirmacion
+        estaAbierto={modalAbierto}
+        alCancelar={cerrarModalEliminar}
+        alConfirmar={cerrarModalEliminar}
+        titulo="Confirmar eliminación"
+        mensaje={
+          clienteSeleccionado
+            ? `¿Está seguro de que desea eliminar al cliente ${clienteSeleccionado.name.firstname} ${clienteSeleccionado.name.lastname}?`
+            : ""
+        }
+      />
 
     </div>
   );
