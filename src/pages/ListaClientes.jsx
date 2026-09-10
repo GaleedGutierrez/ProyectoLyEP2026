@@ -105,58 +105,67 @@ const ListaClientes = () => {
         </p>
 
       </div>
-      <table className="tabla-clientes">
+      <div className="tabla-responsive">
 
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Ciudad</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
+          <table className="tabla-clientes">
 
-        <tbody>
+              <thead>
+                  <tr>
+                      <th>ID</th>
+                      <th>Nombre</th>
+                      <th>Email</th>
+                      <th>Teléfono</th>
+                      <th>Ciudad</th>
+                      <th>Acciones</th>
+                  </tr>
+              </thead>
 
-          {clientesFiltrados.map((cliente) => (
-            <tr key={cliente.id}>
+              <tbody>
 
-              <td>{cliente.id}</td>
+                  {clientesFiltrados.map((cliente) => (
+                      <tr key={cliente.id}>
 
-              <td>
-                {cliente.name.firstname} {cliente.name.lastname}
-              </td>
+                          <td>{cliente.id}</td>
 
-              <td>{cliente.email}</td>
+                          <td>
+                              {cliente.name.firstname} {cliente.name.lastname}
+                          </td>
 
-              <td>{cliente.phone}</td>
+                          <td>{cliente.email}</td>
 
-              <td>{cliente.address.city}</td>
+                          <td>{cliente.phone}</td>
 
-              <td className="acciones-cliente">
-                <Link
-                  className="btn-ficha"
-                  to={`/clientes/${cliente.id}`}
-                >
-                  Ver Ficha Completa
-                </Link>
-                <button
-                  type="button"
-                  className="btn-eliminar"
-                  onClick={() => abrirModalEliminar(cliente)}
-                >
-                  Eliminar
-                </button>
-              </td>
+                          <td>{cliente.address.city}</td>
 
-            </tr>
-          ))}
+                          <td className="acciones-cliente">
 
-        </tbody>
+                              <Link
+                                  className="btn-ficha"
+                                  to={`/clientes/${cliente.id}`}
+                              >
+                                  Ver Ficha Completa
+                              </Link>
 
-      </table>
+                              <button
+                                  type="button"
+                                  className="btn-eliminar"
+                                  onClick={() =>
+                                      abrirModalEliminar(cliente)
+                                  }
+                              >
+                                  Eliminar
+                              </button>
+
+                          </td>
+
+                      </tr>
+                  ))}
+
+              </tbody>
+
+          </table>
+
+      </div>
 
       <ModalConfirmacion
         estaAbierto={modalAbierto}
