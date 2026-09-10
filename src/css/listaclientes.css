@@ -9,7 +9,6 @@
     width: min(100% - 2rem, 1200px);
     margin: 2rem auto;
     padding: clamp(1.5rem, 3vw, 2.5rem);
-    overflow-x: auto;
     color: var(--clientes-text);
     background: var(--clientes-surface);
     border: 1px solid var(--clientes-border);
@@ -254,4 +253,45 @@
     .clientes-container .tabla-clientes td {
         padding: 0.875rem 1rem;
     }
+}
+.tabla-responsive {
+    width: 100%;
+    max-width: 100%;
+
+    overflow-x: auto;
+
+    -webkit-overflow-scrolling: touch;
+
+    border-radius: 0.75rem;
+}
+.clientes-container .acciones-cliente {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+
+    justify-content: center;
+    align-items: stretch;
+}
+
+.clientes-container .btn-ficha,
+.clientes-container .btn-eliminar {
+    width: 100%;
+    min-height: 44px;
+}
+
+
+/* md */
+@media (min-width: 768px) {
+
+    .clientes-container .acciones-cliente {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .clientes-container .btn-ficha,
+    .clientes-container .btn-eliminar {
+        width: auto;
+    }
+
 }
