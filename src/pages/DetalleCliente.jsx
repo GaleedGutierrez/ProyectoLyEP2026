@@ -63,6 +63,15 @@ const DetalleCliente = () => {
     return <h2>Cargando cliente...</h2>;
   }
 
+  if (errorCliente || !cliente) {
+    return (
+      <div className="detalle-cliente contenedor-error-cliente">
+        <h2 className="titulo-error-cliente">Cliente no encontrado</h2>
+        <p>No se pudo obtener la información del cliente solicitado.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="detalle-cliente">
       <h1>Ficha del Cliente</h1>
