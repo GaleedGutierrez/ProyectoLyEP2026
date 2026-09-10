@@ -97,7 +97,9 @@
     overflow: hidden;
     font-size: 0.9375rem;
     line-height: 1.5;
-    table-layout: fixed;
+
+    table-layout: auto;
+
     border: 1px solid var(--clientes-border);
     border-collapse: separate;
     border-spacing: 0;
@@ -118,27 +120,11 @@
 }
 
 .clientes-container .tabla-clientes th:nth-child(1) {
-    width: 7%;
-}
-
-.clientes-container .tabla-clientes th:nth-child(2) {
-    width: 19%;
-}
-
-.clientes-container .tabla-clientes th:nth-child(3) {
-    width: 23%;
-}
-
-.clientes-container .tabla-clientes th:nth-child(4) {
-    width: 18%;
-}
-
-.clientes-container .tabla-clientes th:nth-child(5) {
-    width: 15%;
+    width: 70px;
 }
 
 .clientes-container .tabla-clientes th:nth-child(6) {
-    width: 18%;
+    min-width: 220px;
     text-align: center;
 }
 
@@ -278,20 +264,31 @@
 .clientes-container .btn-eliminar {
     width: 100%;
     min-height: 44px;
+
+    white-space: nowrap;
 }
 
-
-/* md */
 @media (min-width: 768px) {
 
     .clientes-container .acciones-cliente {
         flex-direction: row;
         align-items: center;
+        justify-content: center;
     }
 
     .clientes-container .btn-ficha,
     .clientes-container .btn-eliminar {
         width: auto;
+
+        white-space: nowrap;
+    }
+
+    .clientes-container .btn-ficha {
+        min-width: 135px;
+    }
+
+    .clientes-container .btn-eliminar {
+        min-width: 90px;
     }
 
 }
