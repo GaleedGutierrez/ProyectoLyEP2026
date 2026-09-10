@@ -2,12 +2,15 @@ import "../css/listaclientes.css"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import FormCliente from "../components/FormCliente";
+import ModalConfirmacion from "../components/ModalConfirmacion";
 
 const ListaClientes = () => {
   const [clientes, setClientes] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+  const [modalAbierto, setModalAbierto] = useState(false);
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/users")
@@ -26,6 +29,36 @@ const ListaClientes = () => {
         setLoading(false);
       });
   }, []);
+
+  const abrirModalEliminar = (cliente) => {
+    setClienteSeleccionado(cliente);
+    setModalAbierto(true);
+  };
+
+  const cerrarModalEliminar = () => {
+    setClienteSeleccionado(null);
+    setModalAbierto(false);
+  };
+
+  const eliminarClienteConfirmado = () => {
+    if (!clienteSeleccionado) return;
+
+    fetch(`https://fakestoreapi.com/users/${clienteSeleccionado.id}`, {
+      method: "DELETE",
+    })
+      .then(() => {
+        setClientes((prev) =>
+          prev.filter((item) => item.id !== clienteSeleccionado.id)
+        );
+        cerrarModalEliminar();
+      })
+      .catch(() => {
+        setClientes((prev) =>
+          prev.filter((item) => item.id !== clienteSeleccionado.id)
+        );
+        cerrarModalEliminar();
+      });
+  };
 
   const clientesFiltrados = clientes.filter(
     (cliente) =>
@@ -102,13 +135,20 @@ const ListaClientes = () => {
 
               <td>{cliente.address.city}</td>
 
-              <td>
+              <td className="acciones-cliente">
                 <Link
                   className="btn-ficha"
                   to={`/clientes/${cliente.id}`}
                 >
                   Ver Ficha Completa
                 </Link>
+                <button
+                  type="button"
+                  className="btn-eliminar"
+                  onClick={() => abrirModalEliminar(cliente)}
+                >
+                  Eliminar
+                </button>
               </td>
 
             </tr>
@@ -117,6 +157,18 @@ const ListaClientes = () => {
         </tbody>
 
       </table>
+
+      <ModalConfirmacion
+        estaAbierto={modalAbierto}
+        alCancelar={cerrarModalEliminar}
+        alConfirmar={eliminarClienteConfirmado}
+        titulo="Confirmar eliminación"
+        mensaje={
+          clienteSeleccionado
+            ? `¿Está seguro de que desea eliminar al cliente ${clienteSeleccionado.name.firstname} ${clienteSeleccionado.name.lastname}?`
+            : ""
+        }
+      />
 
     </div>
   );
