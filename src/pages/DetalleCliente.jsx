@@ -9,11 +9,33 @@ const DetalleCliente = () => {
 
   const [cliente, setCliente] = useState(null);
   const [mensaje, setMensaje] = useState("");
+  const [cargandoCliente, setCargandoCliente] = useState(true);
+  const [errorCliente, setErrorCliente] = useState(false);
 
   useEffect(() => {
+    setCargandoCliente(true);
+    setErrorCliente(false);
+
     fetch(`https://fakestoreapi.com/users/${id}`)
-      .then((res) => res.json())
-      .then((data) => setCliente(data));
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Error HTTP");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!data) {
+          setErrorCliente(true);
+        } else {
+          setCliente(data);
+        }
+      })
+      .catch(() => {
+        setErrorCliente(true);
+      })
+      .finally(() => {
+        setCargandoCliente(false);
+      });
   }, [id]);
 
   const eliminarCliente = async () => {
@@ -36,7 +58,8 @@ const DetalleCliente = () => {
       setMensaje("Error al eliminar cliente");
     }
   };
-  if (!cliente) {
+
+  if (cargandoCliente) {
     return <h2>Cargando cliente...</h2>;
   }
 
