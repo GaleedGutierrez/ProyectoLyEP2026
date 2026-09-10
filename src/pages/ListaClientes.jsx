@@ -40,6 +40,26 @@ const ListaClientes = () => {
     setModalAbierto(false);
   };
 
+  const eliminarClienteConfirmado = () => {
+    if (!clienteSeleccionado) return;
+
+    fetch(`https://fakestoreapi.com/users/${clienteSeleccionado.id}`, {
+      method: "DELETE",
+    })
+      .then(() => {
+        setClientes((prev) =>
+          prev.filter((item) => item.id !== clienteSeleccionado.id)
+        );
+        cerrarModalEliminar();
+      })
+      .catch(() => {
+        setClientes((prev) =>
+          prev.filter((item) => item.id !== clienteSeleccionado.id)
+        );
+        cerrarModalEliminar();
+      });
+  };
+
   const clientesFiltrados = clientes.filter(
     (cliente) =>
       cliente.name.lastname
@@ -141,7 +161,7 @@ const ListaClientes = () => {
       <ModalConfirmacion
         estaAbierto={modalAbierto}
         alCancelar={cerrarModalEliminar}
-        alConfirmar={cerrarModalEliminar}
+        alConfirmar={eliminarClienteConfirmado}
         titulo="Confirmar eliminación"
         mensaje={
           clienteSeleccionado
