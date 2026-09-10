@@ -1,6 +1,6 @@
 import '../css/detallecliente.css'
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
  
 const DetalleCliente = () => {
  const { id } = useParams();
@@ -9,11 +9,37 @@ const DetalleCliente = () => {
 
   const [cliente, setCliente] = useState(null);
   const [mensaje, setMensaje] = useState("");
+  const [cargandoCliente, setCargandoCliente] = useState(true);
+  const [errorCliente, setErrorCliente] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
 
   useEffect(() => {
+    setCargandoCliente(true);
+    setErrorCliente(false);
+    setMensajeError("");
+
     fetch(`https://fakestoreapi.com/users/${id}`)
-      .then((res) => res.json())
-      .then((data) => setCliente(data));
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`No se pudo encontrar el cliente con el ID ${id}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!data) {
+          setErrorCliente(true);
+          setMensajeError(`No se encontró ningún cliente asociado al ID ${id}.`);
+        } else {
+          setCliente(data);
+        }
+      })
+      .catch((err) => {
+        setErrorCliente(true);
+        setMensajeError(err.message || "Error al intentar obtener los datos del cliente.");
+      })
+      .finally(() => {
+        setCargandoCliente(false);
+      });
   }, [id]);
 
   const eliminarCliente = async () => {
@@ -36,8 +62,21 @@ const DetalleCliente = () => {
       setMensaje("Error al eliminar cliente");
     }
   };
-  if (!cliente) {
+
+  if (cargandoCliente) {
     return <h2>Cargando cliente...</h2>;
+  }
+
+  if (errorCliente || !cliente) {
+    return (
+      <div className="detalle-cliente contenedor-error-cliente">
+        <h2 className="titulo-error-cliente">Cliente no encontrado</h2>
+        <p>{mensajeError || "No se pudo obtener la información del cliente solicitado."}</p>
+        <Link to="/clientes" className="btn-volver-listado">
+          Volver al listado de clientes
+        </Link>
+      </div>
+    );
   }
 
   return (
