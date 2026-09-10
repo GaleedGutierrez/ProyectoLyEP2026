@@ -11,27 +11,31 @@ const DetalleCliente = () => {
   const [mensaje, setMensaje] = useState("");
   const [cargandoCliente, setCargandoCliente] = useState(true);
   const [errorCliente, setErrorCliente] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
 
   useEffect(() => {
     setCargandoCliente(true);
     setErrorCliente(false);
+    setMensajeError("");
 
     fetch(`https://fakestoreapi.com/users/${id}`)
       .then((res) => {
         if (!res.ok) {
-          throw new Error("Error HTTP");
+          throw new Error(`No se pudo encontrar el cliente con el ID ${id}`);
         }
         return res.json();
       })
       .then((data) => {
         if (!data) {
           setErrorCliente(true);
+          setMensajeError(`No se encontró ningún cliente asociado al ID ${id}.`);
         } else {
           setCliente(data);
         }
       })
-      .catch(() => {
+      .catch((err) => {
         setErrorCliente(true);
+        setMensajeError(err.message || "Error al intentar obtener los datos del cliente.");
       })
       .finally(() => {
         setCargandoCliente(false);
@@ -67,7 +71,7 @@ const DetalleCliente = () => {
     return (
       <div className="detalle-cliente contenedor-error-cliente">
         <h2 className="titulo-error-cliente">Cliente no encontrado</h2>
-        <p>No se pudo obtener la información del cliente solicitado.</p>
+        <p>{mensajeError || "No se pudo obtener la información del cliente solicitado."}</p>
         <Link to="/clientes" className="btn-volver-listado">
           Volver al listado de clientes
         </Link>
