@@ -39,8 +39,6 @@ const FormCliente = () => {
 
             username: nombre.toLowerCase().replace(/\s/g, ""),
 
-            password: "1234",
-
             name: {
                 firstname: nombre,
                 lastname: "-"
