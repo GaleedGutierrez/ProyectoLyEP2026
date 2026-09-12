@@ -39,6 +39,8 @@ const FormCliente = () => {
 
             username: nombre.toLowerCase().replace(/\s/g, ""),
 
+            //Se envía sin password porque los clientes no tienen acceso al sistema
+
             name: {
                 firstname: nombre,
                 lastname: "-"
