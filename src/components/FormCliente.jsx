@@ -21,6 +21,13 @@ const FormCliente = () => {
         setMensaje("");
         setError("");
 
+        const limpiarFormulario = () => {
+            setNombre("");
+            setEmail("");
+            setTelefono("");
+            setCiudad("");
+        };
+
         if (
             nombre.trim() === "" ||
             email.trim() === "" ||
@@ -66,10 +73,7 @@ const FormCliente = () => {
                 `Cliente creado correctamente. ID: ${respuesta.id}`
             );
 
-            setNombre("");
-            setEmail("");
-            setTelefono("");
-            setCiudad("");
+            limpiarFormulario();
 
         } catch (err) {
 
