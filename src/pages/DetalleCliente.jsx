@@ -30,7 +30,8 @@ const DetalleCliente = () => {
           setErrorCliente(true);
           setMensajeError(`No se encontró ningún cliente asociado al ID ${id}.`);
         } else {
-          setCliente(data);
+          const { password, ...clienteSeguro } = data;
+          setCliente(clienteSeguro);
         }
       })
       .catch((err) => {
@@ -40,7 +41,7 @@ const DetalleCliente = () => {
       .finally(() => {
         setCargandoCliente(false);
       });
-  }, [id]);
+    }, [id]);
 
   const eliminarCliente = async () => {
     try {
@@ -127,9 +128,7 @@ const DetalleCliente = () => {
         <strong>Usuario:</strong> {cliente.username}
       </p>
 
-      <p>
-        <strong>Contraseña:</strong> {cliente.password}
-      </p>
+      
 
       {role?.trim() === "Gerencia" && (
         <button className='btn-eliminar'onClick={eliminarCliente}>
