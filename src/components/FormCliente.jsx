@@ -38,7 +38,7 @@ const FormCliente = () => {
 
             name: {
                 firstname: nombre,
-                lastname: "-"
+                //Se envia sin lastname porque no se pide en el formulario
             },
 
             address: {
