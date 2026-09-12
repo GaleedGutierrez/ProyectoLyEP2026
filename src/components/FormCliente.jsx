@@ -28,18 +28,6 @@ const FormCliente = () => {
             setCiudad("");
         };
 
-        if (
-            nombre.trim() === "" ||
-            email.trim() === "" ||
-            telefono.trim() === "" ||
-            ciudad.trim() === ""
-        ) {
-
-            setError("Complete todos los campos.");
-
-            return;
-        }
-
         const nuevoCliente = {
 
             email,
@@ -107,6 +95,7 @@ const FormCliente = () => {
                         onChange={(e) =>
                             setNombre(e.target.value)
                         }
+                        required
                     />
 
                 </Form.Group>
@@ -121,6 +110,7 @@ const FormCliente = () => {
                         onChange={(e) =>
                             setEmail(e.target.value)
                         }
+                        required
                     />
 
                 </Form.Group>
@@ -135,6 +125,7 @@ const FormCliente = () => {
                         onChange={(e) =>
                             setTelefono(e.target.value)
                         }
+                        required
                     />
 
                 </Form.Group>
@@ -149,6 +140,7 @@ const FormCliente = () => {
                         onChange={(e) =>
                             setCiudad(e.target.value)
                         }
+                        required
                     />
 
                 </Form.Group>
