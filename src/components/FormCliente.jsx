@@ -71,10 +71,10 @@ const FormCliente = () => {
             setTelefono("");
             setCiudad("");
 
-        } catch {
+        } catch (err) {
 
             setError(
-                "Ocurrió un error al crear el cliente."
+                "Ocurrió un error al crear el cliente.", err
             );
 
         } finally {
