@@ -1,5 +1,5 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom';
 
-const PublicLayout = () => <Outlet />
+const PublicLayout = () => <Outlet />;
 
-export default PublicLayout
+export default PublicLayout;
