@@ -1,12 +1,13 @@
+/* eslint-disable unicorn/prevent-abbreviations */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable react/jsx-handler-names */
 // @ts-nocheck
 import '@styles/listaclientes.css';
 
+import FormCliente from '@components/FormCliente';
+import ModalConfirmacion from '@components/ModalConfirmacion';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import FormCliente from '../components/FormCliente';
-import ModalConfirmacion from '../components/ModalConfirmacion';
 
 const ListaClientes = () => {
 	const [clientes, setClientes] = useState([]);
@@ -16,27 +17,28 @@ const ListaClientes = () => {
 	const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
 	const [modalAbierto, setModalAbierto] = useState(false);
 
-  useEffect(() => {
-    fetch("https://fakestoreapi.com/users")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Error al obtener clientes");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setClientes(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError(true);
-        setLoading(false);
-      });
-  }, []);
+	useEffect(() => {
+		fetch('https://fakestoreapi.com/users')
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error('Error al obtener clientes');
+				}
 
-  const agregarNuevoCliente = (nuevoCliente) => {
-    setClientes([nuevoCliente, ...clientes]);
-  };
+				return res.json();
+			})
+			.then((data) => {
+				setClientes(data);
+				setLoading(false);
+			})
+			.catch(() => {
+				setError(true);
+				setLoading(false);
+			});
+	}, []);
+
+	const agregarNuevoCliente = (nuevoCliente) => {
+		setClientes((clientesActuales) => [nuevoCliente, ...clientesActuales]);
+	};
 
 	const abrirModalEliminar = (cliente) => {
 		setClienteSeleccionado(cliente);
@@ -49,9 +51,7 @@ const ListaClientes = () => {
 	};
 
 	const eliminarClienteConfirmado = () => {
-		if (!clienteSeleccionado) {
-			return;
-		}
+		if (!clienteSeleccionado) return;
 
 		fetch(`https://fakestoreapi.com/users/${clienteSeleccionado.id}`, {
 			method: 'DELETE',
@@ -74,13 +74,16 @@ const ListaClientes = () => {
 			});
 	};
 
-	const clientesFiltrados = clientes.filter(
-		(cliente) =>
-			cliente.name.lastname
-				.toLowerCase()
-				.includes(busqueda.toLowerCase()) ||
-			cliente.address.city.toLowerCase().includes(busqueda.toLowerCase()),
-	);
+	const terminoBusqueda = busqueda.toLowerCase();
+	const clientesFiltrados = clientes.filter((cliente) => {
+		const apellido = cliente.name?.lastname ?? '';
+		const ciudad = cliente.address?.city ?? '';
+
+		return (
+			apellido.toLowerCase().includes(terminoBusqueda) ||
+			ciudad.toLowerCase().includes(terminoBusqueda)
+		);
+	});
 
 	if (loading) {
 		return <h2>Cargando clientes...</h2>;
@@ -93,14 +96,7 @@ const ListaClientes = () => {
 	return (
 		<div className="clientes-container">
 			<h1>Clientes</h1>
-			<FormCliente />
-
-			<hr />
-  return (
-    <div className="clientes-container">
-
-      <h1>Clientes</h1>
-      <FormCliente onClienteCreado={agregarNuevoCliente} />
+			<FormCliente onClienteCreado={agregarNuevoCliente} />
 
 			<div className="contenedor-buscador">
 				<h2 className="titulo-buscador">Buscar Clientes</h2>
@@ -110,7 +106,7 @@ const ListaClientes = () => {
 					placeholder="Buscar por apellido o ciudad"
 					type="text"
 					value={busqueda}
-					onChange={(event_) => setBusqueda(event_.target.value)}
+					onChange={(e) => setBusqueda(e.target.value)}
 				/>
 
 				<p className="cantidad-clientes">
@@ -129,53 +125,22 @@ const ListaClientes = () => {
 							<th>Acciones</th>
 						</tr>
 					</thead>
-        <p className="cantidad-clientes">
-          Clientes encontrados: {clientesFiltrados.length}
-        </p>
-
-      </div>
-      <div className="tabla-responsive">
-
-        <table className="tabla-clientes">
-
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Teléfono</th>
-              <th>Ciudad</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
 
 					<tbody>
 						{clientesFiltrados.map((cliente) => (
 							<tr key={cliente.id}>
 								<td>{cliente.id}</td>
-          <tbody>
-
-            {clientesFiltrados.map((cliente) => (
-              <tr key={cliente.id}>
-
-                <td>{cliente.id}</td>
 
 								<td>
 									{cliente.name.firstname}{' '}
 									{cliente.name.lastname}
 								</td>
-                <td>
-                  {cliente.name.firstname} {cliente.name.lastname}
-                </td>
 
 								<td>{cliente.email}</td>
-                <td>{cliente.email}</td>
 
 								<td>{cliente.phone}</td>
-                <td>{cliente.phone}</td>
 
 								<td>{cliente.address.city}</td>
-                <td>{cliente.address.city}</td>
 
 								<td className="acciones-cliente">
 									<Link
@@ -184,14 +149,6 @@ const ListaClientes = () => {
 									>
 										Ver Ficha Completa
 									</Link>
-                <td className="acciones-cliente">
-
-                  <Link
-                    className="btn-ficha"
-                    to={`/clientes/${cliente.id}`}
-                  >
-                    Ver Ficha Completa
-                  </Link>
 
 									<button
 										className="btn-eliminar"
@@ -208,26 +165,6 @@ const ListaClientes = () => {
 					</tbody>
 				</table>
 			</div>
-                  <button
-                    type="button"
-                    className="btn-eliminar"
-                    onClick={() =>
-                      abrirModalEliminar(cliente)
-                    }
-                  >
-                    Eliminar
-                  </button>
-
-                </td>
-
-              </tr>
-            ))}
-
-          </tbody>
-
-        </table>
-
-      </div>
 
 			<ModalConfirmacion
 				estaAbierto={modalAbierto}
