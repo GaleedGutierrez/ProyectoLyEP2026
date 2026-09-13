@@ -30,6 +30,10 @@ const ListaClientes = () => {
       });
   }, []);
 
+  const agregarNuevoCliente = (nuevoCliente) => {
+    setClientes([nuevoCliente, ...clientes]);
+  };
+
   const abrirModalEliminar = (cliente) => {
     setClienteSeleccionado(cliente);
     setModalAbierto(true);
@@ -82,9 +86,7 @@ const ListaClientes = () => {
     <div className="clientes-container">
 
       <h1>Clientes</h1>
-      <FormCliente />
-
-      <hr />
+      <FormCliente onClienteCreado={agregarNuevoCliente} />
 
       <div className="contenedor-buscador">
 
@@ -107,63 +109,63 @@ const ListaClientes = () => {
       </div>
       <div className="tabla-responsive">
 
-          <table className="tabla-clientes">
+        <table className="tabla-clientes">
 
-              <thead>
-                  <tr>
-                      <th>ID</th>
-                      <th>Nombre</th>
-                      <th>Email</th>
-                      <th>Teléfono</th>
-                      <th>Ciudad</th>
-                      <th>Acciones</th>
-                  </tr>
-              </thead>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Ciudad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
 
-              <tbody>
+          <tbody>
 
-                  {clientesFiltrados.map((cliente) => (
-                      <tr key={cliente.id}>
+            {clientesFiltrados.map((cliente) => (
+              <tr key={cliente.id}>
 
-                          <td>{cliente.id}</td>
+                <td>{cliente.id}</td>
 
-                          <td>
-                              {cliente.name.firstname} {cliente.name.lastname}
-                          </td>
+                <td>
+                  {cliente.name.firstname} {cliente.name.lastname}
+                </td>
 
-                          <td>{cliente.email}</td>
+                <td>{cliente.email}</td>
 
-                          <td>{cliente.phone}</td>
+                <td>{cliente.phone}</td>
 
-                          <td>{cliente.address.city}</td>
+                <td>{cliente.address.city}</td>
 
-                          <td className="acciones-cliente">
+                <td className="acciones-cliente">
 
-                              <Link
-                                  className="btn-ficha"
-                                  to={`/clientes/${cliente.id}`}
-                              >
-                                  Ver Ficha Completa
-                              </Link>
+                  <Link
+                    className="btn-ficha"
+                    to={`/clientes/${cliente.id}`}
+                  >
+                    Ver Ficha Completa
+                  </Link>
 
-                              <button
-                                  type="button"
-                                  className="btn-eliminar"
-                                  onClick={() =>
-                                      abrirModalEliminar(cliente)
-                                  }
-                              >
-                                  Eliminar
-                              </button>
+                  <button
+                    type="button"
+                    className="btn-eliminar"
+                    onClick={() =>
+                      abrirModalEliminar(cliente)
+                    }
+                  >
+                    Eliminar
+                  </button>
 
-                          </td>
+                </td>
 
-                      </tr>
-                  ))}
+              </tr>
+            ))}
 
-              </tbody>
+          </tbody>
 
-          </table>
+        </table>
 
       </div>
 
