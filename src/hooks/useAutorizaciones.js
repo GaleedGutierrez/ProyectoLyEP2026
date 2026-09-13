@@ -1,6 +1,6 @@
-import { useContext } from 'react'
-import { AutorizacionesContext } from '../context/AutorizacionesContext'
-const useAutorizaciones = () => {
-  return useContext(AutorizacionesContext)
-}
-export default useAutorizaciones
+import { AutorizacionesContext } from '@context/AutorizacionesContext';
+import { useContext } from 'react';
+
+const useAutorizaciones = () => useContext(AutorizacionesContext);
+
+export default useAutorizaciones;
