@@ -36,7 +36,19 @@ const usuarios = [
 		sector: 'Gerencia',
 	},
 ];
-const login = (email, password, sector) =>
+
+/**
+ *
+ * @param {string} email
+ * @param {string} password
+ * @param {string} sector
+ * @returns
+ */
+const login = (
+	/** @type {string} */ email,
+	/** @type {string} */ password,
+	/** @type {string} */ sector,
+) =>
 	usuarios.find(
 		(usuario) =>
 			usuario.email === email &&
