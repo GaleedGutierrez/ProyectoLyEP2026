@@ -1,189 +1,148 @@
-import '../css/formcliente.css'
-import { useState } from "react";
-import { Form, Button, Alert, Spinner } from "react-bootstrap";
-import clientesService from "../services/clientesService";
+import '@styles/formcliente.css';
+
+import clientesService from '@services/clientesService';
+import { useState } from 'react';
+import { Alert, Button, Form, Spinner } from 'react-bootstrap';
 
 const FormCliente = () => {
+	const [nombre, setNombre] = useState('');
+	const [email, setEmail] = useState('');
+	const [telefono, setTelefono] = useState('');
+	const [ciudad, setCiudad] = useState('');
+	const [mensaje, setMensaje] = useState('');
+	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
 
-    const [nombre, setNombre] = useState("");
-    const [email, setEmail] = useState("");
-    const [telefono, setTelefono] = useState("");
-    const [ciudad, setCiudad] = useState("");
+	const handleFormSubmit = async (
+		/** @type {{ preventDefault: () => void; }} */ event_,
+	) => {
+		event_.preventDefault();
 
-    const [mensaje, setMensaje] = useState("");
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
+		setMensaje('');
+		setError('');
 
-    const manejarSubmit = async (e) => {
+		const limpiarFormulario = () => {
+			setNombre('');
+			setEmail('');
+			setTelefono('');
+			setCiudad('');
+		};
 
-        e.preventDefault();
+		const nuevoCliente = {
+			email,
 
-        setMensaje("");
-        setError("");
+			username: nombre.toLowerCase().replace(/\s/g, ''),
 
-        const limpiarFormulario = () => {
-            setNombre("");
-            setEmail("");
-            setTelefono("");
-            setCiudad("");
-        };
+			//Se envía sin password porque los clientes no tienen acceso al sistema
 
-        const nuevoCliente = {
+			name: {
+				firstname: nombre,
+				//Se envia sin lastname porque no se pide en el formulario
+			},
 
-            email,
+			address: {
+				city: ciudad,
+			},
 
-            username: nombre.toLowerCase().replace(/\s/g, ""),
+			phone: telefono,
+		};
 
-            //Se envía sin password porque los clientes no tienen acceso al sistema
+		try {
+			setLoading(true);
 
-            name: {
-                firstname: nombre,
-                //Se envia sin lastname porque no se pide en el formulario
-            },
+			const respuesta = await clientesService.crearCliente(nuevoCliente);
 
-            address: {
-                city: ciudad
-            },
+			setMensaje(`Cliente creado correctamente. ID: ${respuesta.id}`);
 
-            phone: telefono
-        };
+			limpiarFormulario();
+		} catch (error_) {
+			if (error_ instanceof Error) {
+				setError(
+					`Ocurrió un error al crear el cliente: ${error_.message}`,
+				);
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
 
-        try {
+	return (
+		<div className="formulario-cliente">
+			<h3>Nuevo Cliente</h3>
 
-            setLoading(true);
+			<Form onSubmit={handleFormSubmit}>
+				<Form.Group className="mb-3">
+					<Form.Label>Nombre</Form.Label>
 
-            const respuesta =
-                await clientesService.crearCliente(
-                    nuevoCliente
-                );
+					<Form.Control
+						required
+						type="text"
+						value={nombre}
+						onChange={(event_) => setNombre(event_.target.value)}
+					/>
+				</Form.Group>
 
-            setMensaje(
-                `Cliente creado correctamente. ID: ${respuesta.id}`
-            );
+				<Form.Group className="mb-3">
+					<Form.Label>Email</Form.Label>
 
-            limpiarFormulario();
+					<Form.Control
+						required
+						type="email"
+						value={email}
+						onChange={(event_) => setEmail(event_.target.value)}
+					/>
+				</Form.Group>
 
-        } catch (err) {
+				<Form.Group className="mb-3">
+					<Form.Label>Teléfono</Form.Label>
 
-            setError(
-                "Ocurrió un error al crear el cliente.", err
-            );
+					<Form.Control
+						required
+						type="text"
+						value={telefono}
+						onChange={(event_) => setTelefono(event_.target.value)}
+					/>
+				</Form.Group>
 
-        } finally {
+				<Form.Group className="mb-3">
+					<Form.Label>Ciudad</Form.Label>
 
-            setLoading(false);
+					<Form.Control
+						required
+						type="text"
+						value={ciudad}
+						onChange={(event_) => setCiudad(event_.target.value)}
+					/>
+				</Form.Group>
 
-        }
+				<Button
+					disabled={loading}
+					type="submit"
+					variant="primary"
+				>
+					{loading ? <Spinner size="sm" /> : 'Guardar Cliente'}
+				</Button>
+			</Form>
 
-    };
+			{mensaje && (
+				<Alert
+					className="mt-3"
+					variant="success"
+				>
+					{mensaje}
+				</Alert>
+			)}
 
-    return (
-
-        <div className='formulario-cliente'>
-
-            <h3>Nuevo Cliente</h3>
-
-            <Form onSubmit={manejarSubmit}>
-
-                <Form.Group className="mb-3">
-
-                    <Form.Label>Nombre</Form.Label>
-
-                    <Form.Control
-                        type="text"
-                        value={nombre}
-                        onChange={(e) =>
-                            setNombre(e.target.value)
-                        }
-                        required
-                    />
-
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-
-                    <Form.Label>Email</Form.Label>
-
-                    <Form.Control
-                        type="email"
-                        value={email}
-                        onChange={(e) =>
-                            setEmail(e.target.value)
-                        }
-                        required
-                    />
-
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-
-                    <Form.Label>Teléfono</Form.Label>
-
-                    <Form.Control
-                        type="text"
-                        value={telefono}
-                        onChange={(e) =>
-                            setTelefono(e.target.value)
-                        }
-                        required
-                    />
-
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-
-                    <Form.Label>Ciudad</Form.Label>
-
-                    <Form.Control
-                        type="text"
-                        value={ciudad}
-                        onChange={(e) =>
-                            setCiudad(e.target.value)
-                        }
-                        required
-                    />
-
-                </Form.Group>
-
-                <Button
-                    variant="primary"
-                    type="submit"
-                    disabled={loading}
-                >
-
-                    {
-                        loading
-                            ? <Spinner size="sm" />
-                            : "Guardar Cliente"
-                    }
-
-                </Button>
-
-            </Form>
-
-            {
-                mensaje &&
-                <Alert
-                    className="mt-3"
-                    variant="success"
-                >
-                    {mensaje}
-                </Alert>
-            }
-
-            {
-                error &&
-                <Alert
-                    className="mt-3"
-                    variant="danger"
-                >
-                    {error}
-                </Alert>
-            }
-
-        </div>
-
-    );
+			{error && (
+				<Alert
+					className="mt-3"
+					variant="danger"
+				>
+					{error}
+				</Alert>
+			)}
+		</div>
+	);
 };
 
 export default FormCliente;
