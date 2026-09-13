@@ -1,0 +1,19 @@
+{
+	"endOfLine": "auto",
+	"overrides": [
+		{
+			"files": "*.jsonc",
+			"options": {
+				"trailingComma": "none"
+			}
+		},
+		{
+			"files": "*.md",
+			"options": {
+				"printWidth": 80,
+				"proseWrap": "always"
+			}
+		}
+	],
+	"singleAttributePerLine": true
+}
