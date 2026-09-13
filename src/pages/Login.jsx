@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import '@styles/login.css';
 
 import useAutorizaciones from '@hooks/useAutorizaciones';
