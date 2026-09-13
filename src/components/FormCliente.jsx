@@ -1,8 +1,7 @@
-import '@styles/formcliente.css';
-
-import clientesService from '@services/clientesService';
-import { useState } from 'react';
-import { Alert, Button, Form, Spinner } from 'react-bootstrap';
+import '../css/formcliente.css'
+import { useState } from "react";
+import { Form, Button, Alert, Spinner, Modal, Toast, ToastContainer } from "react-bootstrap";
+import clientesService from "../services/clientesService";
 
 const FormCliente = () => {
 	const [nombre, setNombre] = useState('');
@@ -12,6 +11,22 @@ const FormCliente = () => {
 	const [mensaje, setMensaje] = useState('');
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
+const FormCliente = ({ onClienteCreado }) => {
+
+    const [nombre, setNombre] = useState("");
+    const [email, setEmail] = useState("");
+    const [telefono, setTelefono] = useState("");
+    const [ciudad, setCiudad] = useState("");
+
+    const [mensaje, setMensaje] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const [showModal, setShowModal] = useState(false);
+    const [showToast, setShowToast] = useState(false)
+
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
 
 	const handleFormSubmit = async (
 		/** @type {{ preventDefault: () => void; }} */ event_,
@@ -51,6 +66,19 @@ const FormCliente = () => {
 			setLoading(true);
 
 			const respuesta = await clientesService.crearCliente(nuevoCliente);
+            const respuesta =
+                await clientesService.crearCliente(nuevoCliente);
+
+            handleClose();
+            setShowToast(true);
+
+            const clienteParaLaTabla = {
+                ...nuevoCliente,
+                id: respuesta.id
+            };
+
+            onClienteCreado(clienteParaLaTabla);
+
 
 			setMensaje(`Cliente creado correctamente. ID: ${respuesta.id}`);
 
@@ -69,51 +97,39 @@ const FormCliente = () => {
 	return (
 		<div className="formulario-cliente">
 			<h3>Nuevo Cliente</h3>
+    return (
 
-			<Form onSubmit={handleFormSubmit}>
-				<Form.Group className="mb-3">
-					<Form.Label>Nombre</Form.Label>
+        <div className='formulario-cliente'>
+            <Button variant="primary" onClick={handleShow} className="mb-3">
+                Crear Nuevo Cliente
+            </Button>
 
-					<Form.Control
-						required
-						type="text"
-						value={nombre}
-						onChange={(event_) => setNombre(event_.target.value)}
-					/>
-				</Form.Group>
+            <Modal show={showModal} onHide={handleClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Nuevo Cliente</Modal.Title>
+                </Modal.Header>
 
-				<Form.Group className="mb-3">
-					<Form.Label>Email</Form.Label>
+                <Modal.Body>
+                    <Form onSubmit={manejarSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Nombre</Form.Label>
+                            <Form.Control type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                        </Form.Group>
 
-					<Form.Control
-						required
-						type="email"
-						value={email}
-						onChange={(event_) => setEmail(event_.target.value)}
-					/>
-				</Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        </Form.Group>
 
-				<Form.Group className="mb-3">
-					<Form.Label>Teléfono</Form.Label>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Teléfono</Form.Label>
+                            <Form.Control type="text" value={telefono} onChange={(e) => setTelefono(e.target.value)} />
+                        </Form.Group>
 
-					<Form.Control
-						required
-						type="text"
-						value={telefono}
-						onChange={(event_) => setTelefono(event_.target.value)}
-					/>
-				</Form.Group>
-
-				<Form.Group className="mb-3">
-					<Form.Label>Ciudad</Form.Label>
-
-					<Form.Control
-						required
-						type="text"
-						value={ciudad}
-						onChange={(event_) => setCiudad(event_.target.value)}
-					/>
-				</Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Ciudad</Form.Label>
+                            <Form.Control type="text" value={ciudad} onChange={(e) => setCiudad(e.target.value)} />
+                        </Form.Group>
 
 				<Button
 					disabled={loading}
@@ -123,6 +139,10 @@ const FormCliente = () => {
 					{loading ? <Spinner size="sm" /> : 'Guardar Cliente'}
 				</Button>
 			</Form>
+                        <Button variant="primary" type="submit" disabled={loading}>
+                            {loading ? <Spinner size="sm" /> : "Guardar Cliente"}
+                        </Button>
+                    </Form>
 
 			{mensaje && (
 				<Alert
@@ -143,6 +163,26 @@ const FormCliente = () => {
 			)}
 		</div>
 	);
+                    {mensaje && <Alert className="mt-3" variant="success">{mensaje}</Alert>}
+                    {error && <Alert className="mt-3" variant="danger">{error}</Alert>}
+                </Modal.Body>
+            </Modal>
+            <ToastContainer position="top-end" className="p-3" style={{ position: 'fixed', zIndex: 1050 }}>
+                <Toast
+                    show={showToast}
+                    onClose={() => setShowToast(false)}
+                    delay={3000}
+                    autohide
+                    bg="success"
+                >
+                    <Toast.Header>
+                        <strong className="me-auto">Notificación</strong>
+                    </Toast.Header>
+                    <Toast.Body className="text-white">Cliente creado exitosamente.</Toast.Body>
+                </Toast>
+            </ToastContainer>
+        </div>
+    );
 };
 
 export default FormCliente;

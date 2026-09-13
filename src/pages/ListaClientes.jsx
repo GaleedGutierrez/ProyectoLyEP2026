@@ -16,24 +16,27 @@ const ListaClientes = () => {
 	const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
 	const [modalAbierto, setModalAbierto] = useState(false);
 
-	useEffect(() => {
-		fetch('https://fakestoreapi.com/users')
-			.then((response) => {
-				if (!response.ok) {
-					throw new Error('Error al obtener clientes');
-				}
+  useEffect(() => {
+    fetch("https://fakestoreapi.com/users")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Error al obtener clientes");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setClientes(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
+      });
+  }, []);
 
-				return response.json();
-			})
-			.then((data) => {
-				setClientes(data);
-				setLoading(false);
-			})
-			.catch(() => {
-				setError(true);
-				setLoading(false);
-			});
-	}, []);
+  const agregarNuevoCliente = (nuevoCliente) => {
+    setClientes([nuevoCliente, ...clientes]);
+  };
 
 	const abrirModalEliminar = (cliente) => {
 		setClienteSeleccionado(cliente);
@@ -93,6 +96,11 @@ const ListaClientes = () => {
 			<FormCliente />
 
 			<hr />
+  return (
+    <div className="clientes-container">
+
+      <h1>Clientes</h1>
+      <FormCliente onClienteCreado={agregarNuevoCliente} />
 
 			<div className="contenedor-buscador">
 				<h2 className="titulo-buscador">Buscar Clientes</h2>
@@ -121,22 +129,53 @@ const ListaClientes = () => {
 							<th>Acciones</th>
 						</tr>
 					</thead>
+        <p className="cantidad-clientes">
+          Clientes encontrados: {clientesFiltrados.length}
+        </p>
+
+      </div>
+      <div className="tabla-responsive">
+
+        <table className="tabla-clientes">
+
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Ciudad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
 
 					<tbody>
 						{clientesFiltrados.map((cliente) => (
 							<tr key={cliente.id}>
 								<td>{cliente.id}</td>
+          <tbody>
+
+            {clientesFiltrados.map((cliente) => (
+              <tr key={cliente.id}>
+
+                <td>{cliente.id}</td>
 
 								<td>
 									{cliente.name.firstname}{' '}
 									{cliente.name.lastname}
 								</td>
+                <td>
+                  {cliente.name.firstname} {cliente.name.lastname}
+                </td>
 
 								<td>{cliente.email}</td>
+                <td>{cliente.email}</td>
 
 								<td>{cliente.phone}</td>
+                <td>{cliente.phone}</td>
 
 								<td>{cliente.address.city}</td>
+                <td>{cliente.address.city}</td>
 
 								<td className="acciones-cliente">
 									<Link
@@ -145,6 +184,14 @@ const ListaClientes = () => {
 									>
 										Ver Ficha Completa
 									</Link>
+                <td className="acciones-cliente">
+
+                  <Link
+                    className="btn-ficha"
+                    to={`/clientes/${cliente.id}`}
+                  >
+                    Ver Ficha Completa
+                  </Link>
 
 									<button
 										className="btn-eliminar"
@@ -161,6 +208,26 @@ const ListaClientes = () => {
 					</tbody>
 				</table>
 			</div>
+                  <button
+                    type="button"
+                    className="btn-eliminar"
+                    onClick={() =>
+                      abrirModalEliminar(cliente)
+                    }
+                  >
+                    Eliminar
+                  </button>
+
+                </td>
+
+              </tr>
+            ))}
+
+          </tbody>
+
+        </table>
+
+      </div>
 
 			<ModalConfirmacion
 				estaAbierto={modalAbierto}
