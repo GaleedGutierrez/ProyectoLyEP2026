@@ -1,6 +1,6 @@
 import '../css/formcliente.css'
 import { useState } from "react";
-import { Form, Button, Alert, Spinner, Modal } from "react-bootstrap";
+import { Form, Button, Alert, Spinner, Modal, Toast, ToastContainer } from "react-bootstrap";
 import clientesService from "../services/clientesService";
 
 const FormCliente = ({ onClienteCreado }) => {
@@ -15,6 +15,7 @@ const FormCliente = ({ onClienteCreado }) => {
     const [loading, setLoading] = useState(false);
 
     const [showModal, setShowModal] = useState(false);
+    const [showToast, setShowToast] = useState(false)
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
@@ -66,6 +67,7 @@ const FormCliente = ({ onClienteCreado }) => {
                 await clientesService.crearCliente(nuevoCliente);
 
             handleClose();
+            setShowToast(true);
 
             const clienteParaLaTabla = {
                 ...nuevoCliente,
@@ -141,6 +143,20 @@ const FormCliente = ({ onClienteCreado }) => {
                     {error && <Alert className="mt-3" variant="danger">{error}</Alert>}
                 </Modal.Body>
             </Modal>
+            <ToastContainer position="top-end" className="p-3" style={{ position: 'fixed', zIndex: 1050 }}>
+                <Toast
+                    show={showToast}
+                    onClose={() => setShowToast(false)}
+                    delay={3000}
+                    autohide
+                    bg="success"
+                >
+                    <Toast.Header>
+                        <strong className="me-auto">Notificación</strong>
+                    </Toast.Header>
+                    <Toast.Body className="text-white">Cliente creado exitosamente.</Toast.Body>
+                </Toast>
+            </ToastContainer>
         </div>
     );
 };
