@@ -2,13 +2,19 @@
 
 ## Descripcion TP Integrador - 2026
 
-Este proyecto consiste en la construccion de un Panel de Control de Clientes utilizando React y Vite. Esta aplicacion permite la gestion y visualizacion de informacion de clientes a traves del consumo de datos de la API pública FakeStoreAPI, ademas de la navegacion entre distintas vistas de forma dinamica.
+Este proyecto consiste en la construccion de un Panel de Control de Clientes
+utilizando React y Vite. Esta aplicacion permite la gestion y visualizacion de
+informacion de clientes a traves del consumo de datos de la API pública
+FakeStoreAPI, ademas de la navegacion entre distintas vistas de forma dinamica.
 
-Se implementaran tecnologias como React Router Dom, Context API, LocalStorage, peticiones asincronicas y el uso de un framework de interfaz de usuario, para que la experiencia del usuario sea mas dinamica e interactiva.
+Se implementaran tecnologias como React Router Dom, Context API, LocalStorage,
+peticiones asincronicas y el uso de un framework de interfaz de usuario, para
+que la experiencia del usuario sea mas dinamica e interactiva.
 
 ## Flujo de Trabajo para Equipos LyEP - 2026
 
-Este repositorio está configurado como base para práctica profesional. Si sos parte de un equipo de trabajo, seguí las instrucciones del TP01.
+Este repositorio está configurado como base para práctica profesional. Si sos
+parte de un equipo de trabajo, seguí las instrucciones del TP01.
 
 El flujo general es:
 
@@ -23,6 +29,8 @@ El flujo general es:
 
 El código fuente está bajo licencia MIT.
 
-La documentación y material pedagógico están bajo Creative Commons Attribution 4.0.
+La documentación y material pedagógico están bajo Creative Commons Attribution
+4.0.
 
-© 2026 — Cátedra Legislación y Ejercicio Profesional - Carrera Analista Programador Universitario - FI UNJu
+© 2026 — Cátedra Legislación y Ejercicio Profesional - Carrera Analista
+Programador Universitario - FI UNJu

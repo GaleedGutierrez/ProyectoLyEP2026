@@ -1,188 +1,184 @@
-import "../css/listaclientes.css"
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import FormCliente from "../components/FormCliente";
-import ModalConfirmacion from "../components/ModalConfirmacion";
+/* eslint-disable unicorn/prevent-abbreviations */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable react/jsx-handler-names */
+// @ts-nocheck
+import '@styles/listaclientes.css';
+
+import FormCliente from '@components/FormCliente';
+import ModalConfirmacion from '@components/ModalConfirmacion';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const ListaClientes = () => {
-  const [clientes, setClientes] = useState([]);
-  const [busqueda, setBusqueda] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
-  const [modalAbierto, setModalAbierto] = useState(false);
+	const [clientes, setClientes] = useState([]);
+	const [busqueda, setBusqueda] = useState('');
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(false);
+	const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+	const [modalAbierto, setModalAbierto] = useState(false);
 
-  useEffect(() => {
-    fetch("https://fakestoreapi.com/users")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Error al obtener clientes");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setClientes(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError(true);
-        setLoading(false);
-      });
-  }, []);
+	useEffect(() => {
+		fetch('https://fakestoreapi.com/users')
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error('Error al obtener clientes');
+				}
 
-  const agregarNuevoCliente = (nuevoCliente) => {
-    setClientes([nuevoCliente, ...clientes]);
-  };
+				return res.json();
+			})
+			.then((data) => {
+				setClientes(data);
+				setLoading(false);
+			})
+			.catch(() => {
+				setError(true);
+				setLoading(false);
+			});
+	}, []);
 
-  const abrirModalEliminar = (cliente) => {
-    setClienteSeleccionado(cliente);
-    setModalAbierto(true);
-  };
+	const agregarNuevoCliente = (nuevoCliente) => {
+		setClientes((clientesActuales) => [nuevoCliente, ...clientesActuales]);
+	};
 
-  const cerrarModalEliminar = () => {
-    setClienteSeleccionado(null);
-    setModalAbierto(false);
-  };
+	const abrirModalEliminar = (cliente) => {
+		setClienteSeleccionado(cliente);
+		setModalAbierto(true);
+	};
 
-  const eliminarClienteConfirmado = () => {
-    if (!clienteSeleccionado) return;
+	const cerrarModalEliminar = () => {
+		setClienteSeleccionado(null);
+		setModalAbierto(false);
+	};
 
-    fetch(`https://fakestoreapi.com/users/${clienteSeleccionado.id}`, {
-      method: "DELETE",
-    })
-      .then(() => {
-        setClientes((prev) =>
-          prev.filter((item) => item.id !== clienteSeleccionado.id)
-        );
-        cerrarModalEliminar();
-      })
-      .catch(() => {
-        setClientes((prev) =>
-          prev.filter((item) => item.id !== clienteSeleccionado.id)
-        );
-        cerrarModalEliminar();
-      });
-  };
+	const eliminarClienteConfirmado = () => {
+		if (!clienteSeleccionado) return;
 
-  const clientesFiltrados = clientes.filter(
-    (cliente) =>
-      cliente.name.lastname
-        .toLowerCase()
-        .includes(busqueda.toLowerCase()) ||
-      cliente.address.city
-        .toLowerCase()
-        .includes(busqueda.toLowerCase())
-  );
+		fetch(`https://fakestoreapi.com/users/${clienteSeleccionado.id}`, {
+			method: 'DELETE',
+		})
+			.then(() => {
+				setClientes((previous) =>
+					previous.filter(
+						(item) => item.id !== clienteSeleccionado.id,
+					),
+				);
+				cerrarModalEliminar();
+			})
+			.catch(() => {
+				setClientes((previous) =>
+					previous.filter(
+						(item) => item.id !== clienteSeleccionado.id,
+					),
+				);
+				cerrarModalEliminar();
+			});
+	};
 
-  if (loading) {
-    return <h2>Cargando clientes...</h2>;
-  }
+	const terminoBusqueda = busqueda.toLowerCase();
+	const clientesFiltrados = clientes.filter((cliente) => {
+		const apellido = cliente.name?.lastname ?? '';
+		const ciudad = cliente.address?.city ?? '';
 
-  if (error) {
-    return <h2>Error al cargar los clientes.</h2>;
-  }
+		return (
+			apellido.toLowerCase().includes(terminoBusqueda) ||
+			ciudad.toLowerCase().includes(terminoBusqueda)
+		);
+	});
 
-  return (
-    <div className="clientes-container">
+	if (loading) {
+		return <h2>Cargando clientes...</h2>;
+	}
 
-      <h1>Clientes</h1>
-      <FormCliente onClienteCreado={agregarNuevoCliente} />
+	if (error) {
+		return <h2>Error al cargar los clientes.</h2>;
+	}
 
-      <div className="contenedor-buscador">
+	return (
+		<div className="clientes-container">
+			<h1>Clientes</h1>
+			<FormCliente onClienteCreado={agregarNuevoCliente} />
 
-        <h2 className="titulo-buscador">
-          Buscar Clientes
-        </h2>
+			<div className="contenedor-buscador">
+				<h2 className="titulo-buscador">Buscar Clientes</h2>
 
-        <input
-          className="buscador"
-          type="text"
-          placeholder="Buscar por apellido o ciudad"
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-        />
+				<input
+					className="buscador"
+					placeholder="Buscar por apellido o ciudad"
+					type="text"
+					value={busqueda}
+					onChange={(e) => setBusqueda(e.target.value)}
+				/>
 
-        <p className="cantidad-clientes">
-          Clientes encontrados: {clientesFiltrados.length}
-        </p>
+				<p className="cantidad-clientes">
+					Clientes encontrados: {clientesFiltrados.length}
+				</p>
+			</div>
+			<div className="tabla-responsive">
+				<table className="tabla-clientes">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Nombre</th>
+							<th>Email</th>
+							<th>Teléfono</th>
+							<th>Ciudad</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
 
-      </div>
-      <div className="tabla-responsive">
+					<tbody>
+						{clientesFiltrados.map((cliente) => (
+							<tr key={cliente.id}>
+								<td>{cliente.id}</td>
 
-        <table className="tabla-clientes">
+								<td>
+									{cliente.name.firstname}{' '}
+									{cliente.name.lastname}
+								</td>
 
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Teléfono</th>
-              <th>Ciudad</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
+								<td>{cliente.email}</td>
 
-          <tbody>
+								<td>{cliente.phone}</td>
 
-            {clientesFiltrados.map((cliente) => (
-              <tr key={cliente.id}>
+								<td>{cliente.address.city}</td>
 
-                <td>{cliente.id}</td>
+								<td className="acciones-cliente">
+									<Link
+										className="btn-ficha"
+										to={`/clientes/${cliente.id}`}
+									>
+										Ver Ficha Completa
+									</Link>
 
-                <td>
-                  {cliente.name.firstname} {cliente.name.lastname}
-                </td>
+									<button
+										className="btn-eliminar"
+										type="button"
+										onClick={() =>
+											abrirModalEliminar(cliente)
+										}
+									>
+										Eliminar
+									</button>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 
-                <td>{cliente.email}</td>
-
-                <td>{cliente.phone}</td>
-
-                <td>{cliente.address.city}</td>
-
-                <td className="acciones-cliente">
-
-                  <Link
-                    className="btn-ficha"
-                    to={`/clientes/${cliente.id}`}
-                  >
-                    Ver Ficha Completa
-                  </Link>
-
-                  <button
-                    type="button"
-                    className="btn-eliminar"
-                    onClick={() =>
-                      abrirModalEliminar(cliente)
-                    }
-                  >
-                    Eliminar
-                  </button>
-
-                </td>
-
-              </tr>
-            ))}
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-      <ModalConfirmacion
-        estaAbierto={modalAbierto}
-        alCancelar={cerrarModalEliminar}
-        alConfirmar={eliminarClienteConfirmado}
-        titulo="Confirmar eliminación"
-        mensaje={
-          clienteSeleccionado
-            ? `¿Está seguro de que desea eliminar al cliente ${clienteSeleccionado.name.firstname} ${clienteSeleccionado.name.lastname}?`
-            : ""
-        }
-      />
-
-    </div>
-  );
+			<ModalConfirmacion
+				estaAbierto={modalAbierto}
+				handleCancel={cerrarModalEliminar}
+				handleConfirm={eliminarClienteConfirmado}
+				titulo="Confirmar eliminación"
+				mensaje={
+					clienteSeleccionado
+						? `¿Está seguro de que desea eliminar al cliente ${clienteSeleccionado.name.firstname} ${clienteSeleccionado.name.lastname}?`
+						: ''
+				}
+			/>
+		</div>
+	);
 };
 
 export default ListaClientes;

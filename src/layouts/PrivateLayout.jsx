@@ -1,16 +1,16 @@
-import { Outlet } from 'react-router-dom'
-import Header from '../components/Header'
-import Nav from '../components/Nav'
-import Footer from '../components/Footer'
-import RutaProtegida from '../components/RutaProtegida'
+import Footer from '@components/Footer';
+import Header from '@components/Header';
+import Nav from '@components/Nav';
+import RutaProtegida from '@components/RutaProtegida';
+import { Outlet } from 'react-router-dom';
 
 const PrivateLayout = () => (
-  <RutaProtegida>
-    <Header />
-    <Nav />
-    <Outlet />
-    <Footer />
-  </RutaProtegida>
-)
+	<RutaProtegida>
+		<Header />
+		<Nav />
+		<Outlet />
+		<Footer />
+	</RutaProtegida>
+);
 
-export default PrivateLayout
+export default PrivateLayout;
