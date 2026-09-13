@@ -21,17 +21,12 @@ const FormCliente = () => {
         setMensaje("");
         setError("");
 
-        if (
-            nombre.trim() === "" ||
-            email.trim() === "" ||
-            telefono.trim() === "" ||
-            ciudad.trim() === ""
-        ) {
-
-            setError("Complete todos los campos.");
-
-            return;
-        }
+        const limpiarFormulario = () => {
+            setNombre("");
+            setEmail("");
+            setTelefono("");
+            setCiudad("");
+        };
 
         const nuevoCliente = {
 
@@ -39,11 +34,11 @@ const FormCliente = () => {
 
             username: nombre.toLowerCase().replace(/\s/g, ""),
 
-            password: "1234",
+            //Se envía sin password porque los clientes no tienen acceso al sistema
 
             name: {
                 firstname: nombre,
-                lastname: "-"
+                //Se envia sin lastname porque no se pide en el formulario
             },
 
             address: {
@@ -66,15 +61,12 @@ const FormCliente = () => {
                 `Cliente creado correctamente. ID: ${respuesta.id}`
             );
 
-            setNombre("");
-            setEmail("");
-            setTelefono("");
-            setCiudad("");
+            limpiarFormulario();
 
-        } catch {
+        } catch (err) {
 
             setError(
-                "Ocurrió un error al crear el cliente."
+                "Ocurrió un error al crear el cliente.", err
             );
 
         } finally {
@@ -103,6 +95,7 @@ const FormCliente = () => {
                         onChange={(e) =>
                             setNombre(e.target.value)
                         }
+                        required
                     />
 
                 </Form.Group>
@@ -117,6 +110,7 @@ const FormCliente = () => {
                         onChange={(e) =>
                             setEmail(e.target.value)
                         }
+                        required
                     />
 
                 </Form.Group>
@@ -131,6 +125,7 @@ const FormCliente = () => {
                         onChange={(e) =>
                             setTelefono(e.target.value)
                         }
+                        required
                     />
 
                 </Form.Group>
@@ -145,6 +140,7 @@ const FormCliente = () => {
                         onChange={(e) =>
                             setCiudad(e.target.value)
                         }
+                        required
                     />
 
                 </Form.Group>
